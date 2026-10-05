@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KEEL · PW-01 · Agensphere</title>
+  <meta name="description" content="Watch an agent crash in the middle of a refund, and the refund still land exactly once. A replay of recorded KEEL runs." />
+  <meta property="og:title" content="KEEL — one crash, one refund" />
+  <meta property="og:description" content="Durable execution for agents: crash-proof, replayable, forkable runs with exactly-once effects." />
+  <meta property="og:image" content="media/poster.png" />
+  <link rel="icon" href="assets/logo-light.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #EDEBE5; --fg: #151514; --fg-soft: #3d3c38; --mute: #66655F; --accent: #D9481C;
+      --rule: rgba(21,21,20,.14); --rule-strong: #151514; --grid-line: rgba(21,21,20,.05);
+      --bar: rgba(237,235,229,.88);
+      --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+      --font-sans: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --pad-x: clamp(20px, 5vw, 72px);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #121211; --fg: #E9E7E1; --fg-soft: #C9C6BE; --mute: #8E8C85;
+        --rule: rgba(233,231,225,.14); --rule-strong: rgba(233,231,225,.4); --grid-line: rgba(233,231,225,.05);
+        --bar: rgba(18,18,17,.88); color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #121211; --fg: #E9E7E1; --fg-soft: #C9C6BE; --mute: #8E8C85;
+      --rule: rgba(233,231,225,.14); --rule-strong: rgba(233,231,225,.4); --grid-line: rgba(233,231,225,.05);
+      --bar: rgba(18,18,17,.88); color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--fg); font: 400 15px/1.55 var(--font-sans); -webkit-font-smoothing: antialiased; }
+    a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+    a:hover { color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .label { font: 500 10.5px/1.3 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+    .kicker { font: 500 10.5px/1 var(--font-mono); letter-spacing: .1em; color: var(--accent); }
+
+    header.bar { position: sticky; top: 0; z-index: 2; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding-inline: var(--pad-x); background: var(--bar); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand img { width: 22px; height: 22px; mix-blend-mode: multiply; }
+    .brand span { font: 500 12px/1 var(--font-mono); letter-spacing: .14em; }
+    :root[data-theme="dark"] .brand img { display: none; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .brand img { display: none; } }
+    nav { display: flex; gap: 20px; align-items: center; }
+    nav a { font: 500 11px/1 var(--font-mono); letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+    nav a.cta { padding: 10px 12px; border: 1px solid var(--rule-strong); }
+    nav a.cta:hover { background: var(--fg); color: var(--bg); }
+    @media (max-width: 640px) { nav a:not(.cta) { display: none; } }
+
+    main { padding: 28px var(--pad-x) 80px; max-width: 1600px; margin: 0 auto;
+      background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px; }
+    .intro { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 12px 48px; align-items: end; margin-bottom: 20px; }
+    h1 { margin: 10px 0 0; font: 300 clamp(36px, 4.6vw, 64px)/1 var(--font-serif); letter-spacing: -.025em; text-wrap: balance; }
+    h1 em { font-style: italic; }
+    .lede { margin: 0; color: var(--fg-soft); max-width: 62ch; font-size: 16px; }
+    keel-replay { --keel-log-height: 340px; }
+
+    section.more { margin-top: 64px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); border-top: 1px solid var(--rule-strong); }
+    section.more > div { padding: 18px 24px 18px 0; border-bottom: 1px solid var(--rule); }
+    section.more h2 { margin: 8px 0; font: 400 24px/1.1 var(--font-serif); letter-spacing: -.01em; }
+    section.more p { margin: 0; color: var(--fg-soft); font-size: 14.5px; }
+    pre { margin: 10px 0 0; padding: 14px; background: #151514; color: #E9E7E1; font: 400 12px/1.7 var(--font-mono); overflow-x: auto; }
+    pre .c { color: #8E8C85; }
+    footer { padding: 20px var(--pad-x); border-top: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="https://agensphere.com/?utm_source=keel-demo&utm_medium=referral&utm_campaign=keel"><img src="assets/logo-light.png" alt="" /><span>AGENSPHERE</span></a>
+    <nav>
+      <span class="label">PW-01 · KEEL</span>
+      <a href="https://github.com/Agensphere/keel">GitHub</a>
+      <a class="cta" href="https://agensphere.com/?utm_source=keel-demo&utm_medium=referral&utm_campaign=keel#brief">Describe a system →</a>
+    </nav>
+  </header>
+  <main>
+    <div class="intro">
+      <div>
+        <div class="kicker">§04 — ARTIFACTS · PW-01 · ● IN BUILD</div>
+        <h1>The agent crashed after calling Stripe. Did the customer get refunded <em>zero</em> times, once, or twice?</h1>
+      </div>
+      <p class="lede">KEEL records every model call and tool call to a durable log before it is used. Kill the worker mid-refund and a fresh one resumes from the log, with no repeated model calls and no second refund. Then fork the same run onto another model and compare.</p>
+    </div>
+
+    <keel-replay src="recordings/flagship.json" chaos-src="recordings/chaos-summary.json"></keel-replay>
+
+    <section class="more">
+      <div>
+        <div class="label">01 · Record</div>
+        <h2>Don’t make the model deterministic.</h2>
+        <p>Make the run deterministic by recording. LLM output, tool results, the clock and randomness all pass through <code>ctx</code> and land in an append-only, hash-chained log.</p>
+      </div>
+      <div>
+        <div class="label">02 · Recover</div>
+        <h2>Intent before effect.</h2>
+        <p>The refund’s intent is durable before Stripe is called, and its idempotency key comes from the step, not the attempt. Every retry, by any worker, carries the same key.</p>
+      </div>
+      <div>
+        <div class="label">03 · Fork</div>
+        <h2>Real runs, new model.</h2>
+        <p>Fork at any step onto another model. History is shared, not copied; irreversible tools are simulated; the diff shows trajectory, outcome, tokens and cost.</p>
+      </div>
+      <div>
+        <div class="label">Run it yourself</div>
+        <pre><span class="c"># one process, no Postgres</span>
+git clone https://github.com/Agensphere/keel
+cd keel && cargo run -p agensphere-keel-cli -- dev</pre>
+      </div>
+    </section>
+  </main>
+  <footer class="label">
+    <span>KEEL by Agensphere · Apache-2.0</span>
+    <span>Replaying recorded runs · <a href="https://github.com/Agensphere/keel">engine in the repo</a></span>
+    <span>hello@agensphere.com</span>
+  </footer>
+  <script type="module" src="widget/keel-replay.js"></script>
+  <script type="module">
+    // ?state=recovered | diff jumps straight to a finished state (used to render the poster).
+    const params = new URLSearchParams(location.search);
+    const theme = params.get("theme") || document.documentElement.dataset.theme;
+    if (theme) {
+      document.documentElement.dataset.theme = theme;
+      document.querySelector("keel-replay").setAttribute("theme", theme);
+    }
+    const state = params.get("state");
+    if (state) {
+      await customElements.whenDefined("keel-replay");
+      const k = document.querySelector("keel-replay");
+      k.setAttribute("speed", "50");
+      await new Promise((r) => setTimeout(r, 400));
+      await k.play();
+      await k.playChaos();
+      if (state === "diff") await k.playFork();
+      document.documentElement.dataset.ready = "1";
+    }
+  </script>
+</body>
+</html>
