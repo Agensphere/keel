@@ -20,98 +20,115 @@
 const SCHEMA = "keel.recording/v1";
 
 const css = `
+/* Agensphere tokens (Rev 2026.10): paper/night grounds, one accent, square corners, 1px rules, no shadows.
+   Fonts are loaded by the host page: Newsreader 300/400, IBM Plex Sans 400/500, IBM Plex Mono 400/500. */
 :host {
-  --keel-bg: #ffffff;
-  --keel-surface: #f6f7f9;
-  --keel-fg: #12151a;
-  --keel-muted: #5d6673;
-  --keel-border: #e1e4e8;
-  --keel-accent: #3b5bdb;
-  --keel-ok: #2b8a3e;
-  --keel-warn: #b7791f;
-  --keel-danger: #c92a2a;
-  --keel-shared: #868e96;
-  --keel-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --keel-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --keel-radius: 10px;
+  --keel-bg: #EDEBE5;
+  --keel-surface: #EDEBE5;
+  --keel-fg: #151514;
+  --keel-soft: #3d3c38;
+  --keel-muted: #66655F;
+  --keel-rule: rgba(21,21,20,.14);
+  --keel-border: #151514;
+  --keel-accent: #D9481C;
+  --keel-on-accent: #121211;
+  --keel-accent-tint: rgba(217,72,28,.05);
+  --keel-hatch: repeating-linear-gradient(135deg, rgba(21,21,20,.06) 0 1px, transparent 1px 10px);
+  --keel-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --keel-font: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --keel-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --keel-radius: 0;
   --keel-gap: 16px;
+  --keel-log-height: 300px;
   display: block;
-  font-family: var(--keel-font);
+  font: 400 14px/1.5 var(--keel-font);
   color: var(--keel-fg);
   background: var(--keel-bg);
   border: 1px solid var(--keel-border);
   border-radius: var(--keel-radius);
   padding: var(--keel-gap);
-  line-height: 1.45;
-  font-size: 14px;
 }
 @media (prefers-color-scheme: dark) {
   :host(:not([theme="light"])) {
-    --keel-bg: #0f1115; --keel-surface: #171a21; --keel-fg: #e7e9ee; --keel-muted: #9aa3b2;
-    --keel-border: #2a2f3a; --keel-accent: #7c9cff; --keel-ok: #51cf66; --keel-warn: #fcc419;
-    --keel-danger: #ff6b6b; --keel-shared: #6b7280;
+    --keel-bg: #121211; --keel-surface: #121211; --keel-fg: #E9E7E1; --keel-soft: #C9C6BE; --keel-muted: #8E8C85;
+    --keel-rule: rgba(233,231,225,.14); --keel-border: rgba(233,231,225,.4); --keel-accent-tint: rgba(217,72,28,.10);
+    --keel-hatch: repeating-linear-gradient(135deg, rgba(233,231,225,.07) 0 1px, transparent 1px 10px);
   }
 }
 :host([theme="dark"]) {
-  --keel-bg: #0f1115; --keel-surface: #171a21; --keel-fg: #e7e9ee; --keel-muted: #9aa3b2;
-  --keel-border: #2a2f3a; --keel-accent: #7c9cff; --keel-ok: #51cf66; --keel-warn: #fcc419;
-  --keel-danger: #ff6b6b; --keel-shared: #6b7280;
+  --keel-bg: #121211; --keel-surface: #121211; --keel-fg: #E9E7E1; --keel-soft: #C9C6BE; --keel-muted: #8E8C85;
+  --keel-rule: rgba(233,231,225,.14); --keel-border: rgba(233,231,225,.4); --keel-accent-tint: rgba(217,72,28,.10);
+  --keel-hatch: repeating-linear-gradient(135deg, rgba(233,231,225,.07) 0 1px, transparent 1px 10px);
 }
-* { box-sizing: border-box; }
-.top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.title { font-weight: 600; }
-.sub { color: var(--keel-muted); font-size: 12px; }
+* { box-sizing: border-box; border-radius: var(--keel-radius); }
+.label, .panel h4, .sub.mono { font: 500 10.5px/1.3 var(--keel-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--keel-muted); }
+.kicker { font: 500 10.5px/1 var(--keel-mono); letter-spacing: .1em; color: var(--keel-accent); }
+.top { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: space-between; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--keel-border); }
+.title { font: 300 26px/1.05 var(--keel-serif); letter-spacing: -.02em; margin-top: 6px; }
+.title em { font-style: italic; }
+.sub { color: var(--keel-soft); font-size: 13px; }
 .grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--keel-gap); }
-@media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
-.panel { background: var(--keel-surface); border: 1px solid var(--keel-border); border-radius: var(--keel-radius); padding: 12px; min-width: 0; }
-.panel h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--keel-muted); font-weight: 600; display: flex; justify-content: space-between; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+.panel { background: var(--keel-surface); border: 1px solid var(--keel-border); padding: 12px; min-width: 0; }
+.panel h4 { margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid var(--keel-rule); display: flex; justify-content: space-between; gap: 8px; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; }
-button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--keel-border); background: var(--keel-bg); color: var(--keel-fg); cursor: pointer; }
-button:hover:not(:disabled) { border-color: var(--keel-accent); }
-button:disabled { opacity: .45; cursor: default; }
-button.primary { background: var(--keel-accent); border-color: var(--keel-accent); color: #fff; }
-button.danger { border-color: var(--keel-danger); color: var(--keel-danger); }
-button.pulse { animation: pulse 1s ease-in-out infinite; }
-@keyframes pulse { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--keel-danger) 30%, transparent); } }
-.worker { font-family: var(--keel-mono); font-size: 12px; padding: 6px 8px; border-radius: 6px; margin-bottom: 8px; background: var(--keel-bg); border: 1px solid var(--keel-border); min-height: 30px; }
-.worker.dead { border-color: var(--keel-danger); color: var(--keel-danger); }
-.worker.ok { border-color: var(--keel-ok); }
-ol.log { list-style: none; margin: 0; padding: 0; font-family: var(--keel-mono); font-size: 12px; max-height: 300px; overflow: auto; }
-ol.log li { display: grid; grid-template-columns: 2.2em 6.5em 1fr; gap: 6px; padding: 3px 4px; border-radius: 4px; animation: in .25s ease-out; }
+button { font: 500 11px/1 var(--keel-mono); letter-spacing: .08em; text-transform: uppercase; padding: 11px 13px; border: 1px solid var(--keel-border); background: transparent; color: var(--keel-fg); cursor: pointer; transition: background .15s ease, color .15s ease; }
+button:hover:not(:disabled) { background: var(--keel-fg); color: var(--keel-bg); }
+button:disabled { opacity: .4; cursor: default; }
+button:focus-visible { outline: 2px solid var(--keel-accent); outline-offset: 2px; }
+button.primary { background: var(--keel-fg); color: var(--keel-bg); }
+button.primary:hover:not(:disabled) { background: transparent; color: var(--keel-fg); }
+:host([theme="dark"]) button.primary { background: var(--keel-accent); color: var(--keel-on-accent); border-color: var(--keel-accent); }
+@media (prefers-color-scheme: dark) { :host(:not([theme="light"])) button.primary { background: var(--keel-accent); color: var(--keel-on-accent); border-color: var(--keel-accent); } }
+button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--keel-accent); margin-right: 7px; vertical-align: 0; }
+button.pulse { animation: pulse 1s steps(2, jump-none) infinite; }
+@keyframes pulse { 50% { background: var(--keel-accent-tint); border-color: var(--keel-accent); } }
+.worker { font: 400 12px/1.4 var(--keel-mono); padding: 8px; margin-bottom: 10px; border: 1px solid var(--keel-rule); min-height: 34px; display: flex; gap: 8px; align-items: center; }
+.worker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--keel-muted); flex: none; }
+.worker.live::before { background: var(--keel-accent); }
+.worker.dead { border: 1px dashed var(--keel-border); background: var(--keel-hatch); }
+.worker.dead::before { background: transparent; border: 1px solid var(--keel-fg); }
+.worker.ok { border-color: var(--keel-border); }
+.worker.ok::before { content: "✓"; width: auto; height: auto; background: none; color: var(--keel-fg); }
+ol.log { list-style: none; margin: 0; padding: 0; font: 400 12px/1.6 var(--keel-mono); max-height: var(--keel-log-height); overflow: auto; }
+ol.log li { display: grid; grid-template-columns: 2.2em 6.5em 1fr; gap: 6px; padding: 3px 6px; border-bottom: 1px solid var(--keel-rule); border-left: 2px solid transparent; }
 ol.log li .seq { color: var(--keel-muted); text-align: right; }
-ol.log li .step { color: var(--keel-accent); }
-ol.log li .what { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-ol.log li.e1 { border-left: 3px solid var(--keel-accent); }
-ol.log li.e2 { border-left: 3px solid var(--keel-ok); }
-ol.log li.e3 { border-left: 3px solid var(--keel-warn); }
-ol.log li.note { color: var(--keel-danger); grid-template-columns: 1fr; }
-ol.log li.info { color: var(--keel-muted); grid-template-columns: 1fr; font-style: italic; }
-@keyframes in { from { opacity: 0; transform: translateY(-2px); } }
-.refund { font-family: var(--keel-mono); font-size: 12px; padding: 8px; border: 1px solid var(--keel-border); border-radius: 6px; background: var(--keel-bg); margin-bottom: 6px; animation: in .3s ease-out; }
-.refund b { color: var(--keel-ok); }
-.empty { color: var(--keel-muted); font-size: 13px; }
-.counter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; text-align: center; }
-.counter div { background: var(--keel-bg); border: 1px solid var(--keel-border); border-radius: 6px; padding: 6px 2px; }
-.counter b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
-.counter span { font-size: 11px; color: var(--keel-muted); }
-.hint { margin-top: 10px; font-size: 13px; color: var(--keel-muted); min-height: 1.4em; }
+ol.log li .step { color: var(--keel-fg); font-weight: 500; }
+ol.log li .what { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--keel-soft); }
+ol.log li.e1 { border-left: 2px dashed var(--keel-muted); }
+ol.log li.e2 { border-left: 2px solid var(--keel-fg); }
+ol.log li.e3 { border-left: 2px solid var(--keel-accent); background: var(--keel-accent-tint); }
+ol.log li.note { grid-template-columns: 1fr; color: var(--keel-fg); background: var(--keel-hatch); }
+ol.log li.info { grid-template-columns: 1fr; color: var(--keel-muted); font-style: italic; }
+.refund { font: 400 12px/1.5 var(--keel-mono); padding: 10px; border: 1px solid var(--keel-border); margin-bottom: 8px; }
+.refund b { font: 300 22px/1 var(--keel-serif); letter-spacing: -.01em; margin-right: 4px; }
+.empty { min-height: 64px; display: grid; place-items: center; background: var(--keel-hatch); border: 1px dashed var(--keel-rule); color: var(--keel-muted); font: 500 10.5px/1 var(--keel-mono); letter-spacing: .1em; text-transform: uppercase; }
+.counter { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 12px; border-top: 1px solid var(--keel-border); }
+.counter div { padding: 10px 6px 4px 0; border-bottom: 1px solid var(--keel-rule); }
+.counter b { display: block; font: 300 40px/1 var(--keel-serif); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.counter span { font: 500 10px/1.2 var(--keel-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--keel-muted); }
+.hint { margin-top: 12px; font: italic 300 18px/1.3 var(--keel-serif); color: var(--keel-fg); min-height: 1.4em; }
 .diff { margin-top: var(--keel-gap); display: none; }
 .diff.show { display: block; }
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 720px) { .cols { grid-template-columns: 1fr; } }
-.traj { font-family: var(--keel-mono); font-size: 12px; }
-.traj div { padding: 2px 0; }
-.traj .ins { color: var(--keel-ok); } .traj .del { color: var(--keel-danger); }
-.msg { font-size: 13px; padding: 8px; border-radius: 6px; background: var(--keel-bg); border: 1px solid var(--keel-border); }
-.bars { display: grid; gap: 8px; font-size: 12px; }
-.bar { display: grid; grid-template-columns: 6.5em 1fr 5.5em; align-items: center; gap: 8px; }
-.bar .track { height: 8px; background: var(--keel-bg); border-radius: 4px; overflow: hidden; border: 1px solid var(--keel-border); }
-.bar .fill { height: 100%; background: var(--keel-accent); transition: width .6s ease; }
-.bar .fill.b { background: var(--keel-ok); }
-.bar .v { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--keel-mono); }
-.badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 999px; border: 1px solid var(--keel-border); color: var(--keel-muted); }
-.label { margin-top: 12px; font-size: 12px; color: var(--keel-muted); }
-.label code { font-family: var(--keel-mono); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.traj { font: 400 12px/1.7 var(--keel-mono); border-top: 1px solid var(--keel-rule); margin-top: 6px; }
+.traj div { border-bottom: 1px solid var(--keel-rule); }
+.traj .ins::before { content: "+ "; color: var(--keel-accent); }
+.traj .del::before { content: "− "; }
+.msg { font-size: 13.5px; padding: 10px; border: 1px solid var(--keel-rule); color: var(--keel-soft); margin-top: 6px; }
+.bars { display: grid; gap: 10px; font: 400 12px/1.3 var(--keel-mono); align-content: start; }
+.bar { display: grid; grid-template-columns: 7.5em 1fr 5.5em; align-items: center; gap: 8px; }
+.bar .track { height: 8px; border: 1px solid var(--keel-rule); }
+.bar .fill { height: 100%; background: var(--keel-fg); transition: width .3s ease; }
+.bar .fill.b { background: var(--keel-accent); }
+.bar .v { text-align: right; font-variant-numeric: tabular-nums; }
+.key { display: inline-block; width: 10px; height: 10px; vertical-align: -1px; margin-right: 4px; background: var(--keel-fg); }
+.key.b { background: var(--keel-accent); }
+.badge { font: 500 10px/1 var(--keel-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--keel-fg); }
+.label-foot { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--keel-rule); font: 400 11.5px/1.5 var(--keel-mono); color: var(--keel-muted); }
+.label-foot code { color: var(--keel-fg); }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 `;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -203,24 +220,24 @@ class KeelReplay extends HTMLElement {
     this.root.innerHTML = `
       <style>${css}</style>
       <div class="top">
-        <div><div class="title">KEEL · refund agent</div><div class="sub" id="ticket"></div></div>
+        <div><div class="kicker">PW-01 — KEEL · REFUND AGENT</div><div class="title">One crash. <em>One</em> refund.</div><div class="sub" id="ticket"></div></div>
         <div class="controls">
-          <button class="primary" id="run" part="button">▶ Run</button>
-          <button class="danger" id="kill" part="button" disabled>⚡ Kill worker</button>
-          <button id="chaos" part="button" disabled>Run 20 with random kills</button>
-          <button id="fork" part="button" disabled>⑂ Fork at triage#1</button>
+          <button class="primary" id="run" part="button">Run →</button>
+          <button id="kill" part="button" disabled><span class="dot"></span>Kill worker</button>
+          <button id="chaos" part="button" disabled>Run 20 · random kills</button>
+          <button id="fork" part="button" disabled>Fork at triage#1</button>
           <button id="reset" part="button">Reset</button>
         </div>
       </div>
       <div class="grid">
         <section class="panel" part="console">
-          <h4><span>KEEL console · event log</span><span id="branch" class="badge">main</span></h4>
+          <h4><span>Event log</span><span>branch <span id="branch" class="badge">main</span></span></h4>
           <div class="worker" id="worker">idle</div>
           <ol class="log" id="log"></ol>
         </section>
         <section class="panel" part="provider">
           <h4><span id="provider">Stripe (test)</span><span id="refundcount">0 refunds</span></h4>
-          <div id="refunds"><div class="empty">no refunds</div></div>
+          <div id="refunds"><div class="empty">No refunds</div></div>
           <div class="counter" id="counter" hidden>
             <div><b id="c-runs">0</b><span>runs</span></div>
             <div><b id="c-kills">0</b><span>workers killed</span></div>
@@ -230,7 +247,7 @@ class KeelReplay extends HTMLElement {
       </div>
       <div class="hint" id="hint"></div>
       <section class="panel diff" id="diff" part="diff"></section>
-      <div class="label" part="label" id="label"></div>`;
+      <div class="label-foot" part="label" id="label"></div>`;
     this.$("#run").onclick = () => this.play();
     this.$("#kill").onclick = () => this.killResolve?.();
     this.$("#chaos").onclick = () => this.playChaos();
@@ -245,7 +262,7 @@ class KeelReplay extends HTMLElement {
     const input = this.rec.run.input || {};
     this.$("#ticket").textContent = input.body ? `${input.ticket_id} · ${input.order_id} · “${input.body}”` : "";
     this.$("#log").innerHTML = "";
-    this.$("#refunds").innerHTML = `<div class="empty">no refunds</div>`;
+    this.$("#refunds").innerHTML = `<div class="empty">No refunds</div>`;
     this.$("#refundcount").textContent = "0 refunds";
     this.$("#worker").className = "worker";
     this.$("#worker").textContent = "idle";
@@ -257,6 +274,7 @@ class KeelReplay extends HTMLElement {
     for (const id of ["kill", "fork", "chaos"]) this.$(`#${id}`).disabled = true;
     this.$("#kill").classList.remove("pulse");
     const models = [...new Set(this.main.events.filter((e) => e.body.type === "LlmCompleted").map((e) => e.body.response?.provider))].join(", ");
+    this.$("#provider").textContent = this.chaos?.provider && this.chaos.provider !== "stripe-test" ? "Payments · Stripe API fake" : "Stripe · test mode";
     const provider = this.chaos?.provider === "stripe-test" ? "Stripe test mode" : this.chaos?.provider ? "a local Stripe-compatible fake" : "the recorded provider";
     this.$("#label").innerHTML = `Replaying recorded runs (model: <code>${esc(models)}</code>, payments: ${esc(provider)}). The engine that produced them is in the repo: <code>keel replay</code> reproduces every step offline.`;
     this.hint("Press Run. Then press Kill worker while it’s on refund#1.");
@@ -321,7 +339,7 @@ class KeelReplay extends HTMLElement {
         const idx = epochs.indexOf(ev.epoch) + 1;
         const seg = segs.find((s) => s.epoch === ev.epoch);
         if (idx > 1) {
-          this.worker(`worker-${String.fromCharCode(96 + idx)} claimed the run · lease epoch ${ev.epoch}`, "ok");
+          this.worker(`worker-${String.fromCharCode(96 + idx)} claimed the run · lease epoch ${ev.epoch}`, "live");
           if (!(await this.wait(700, token))) return;
           const replayed = seg?.replayed_steps ?? 0;
           this.line(`replayed ${replayed} recorded step${replayed === 1 ? "" : "s"} from the log in milliseconds · 0 model calls · 0 tokens`, "info");
@@ -329,7 +347,7 @@ class KeelReplay extends HTMLElement {
           const intent = evs.find((e) => e.body.type === "EffectIntent" && e.seq <= (segs[0]?.last_seq ?? 0) && !evs.some((c) => c.body.type === "EffectCommitted" && c.body.step_id === e.body.step_id && c.seq <= (segs[0]?.last_seq ?? 0)));
           if (intent) this.line(`open intent ${esc(intent.body.step_id)} found · retrying with the same idempotency key`, "info");
         } else {
-          this.worker(`worker-a holds the lease · epoch ${ev.epoch}`);
+          this.worker(`worker-a holds the lease · epoch ${ev.epoch}`, "live");
         }
         lastEpoch = ev.epoch;
       }
@@ -355,7 +373,7 @@ class KeelReplay extends HTMLElement {
   async crash(token) {
     const k = this.kill;
     const isRefund = (k.adapter || "").includes("refund");
-    this.worker(isRefund ? "worker-a is calling Stripe for refund#1…" : "worker-a is working…");
+    this.worker(isRefund ? "worker-a is calling Stripe for refund#1…" : "worker-a is working…", "live");
     if (k.point === "after_call" && k.provider_result) {
       this.addRefund(k.provider_result, "the provider executed this");
     }
@@ -368,12 +386,12 @@ class KeelReplay extends HTMLElement {
     kill.disabled = true;
     kill.classList.remove("pulse");
     if (token !== this.token) return false;
-    this.worker(`✗ worker-a ${k.signal === "SIGKILL" ? "kill -9" : "killed"} · pid ${k.pid}`, "dead");
-    this.line(`✗ worker-a killed (${esc(k.reason)}). Its commit was never written.`, "note");
+    this.worker(`worker-a ${k.signal === "SIGKILL" ? "kill -9" : "killed"} · pid ${k.pid}`, "dead");
+    this.line(`worker-a killed: ${esc(k.reason)}. Its commit was never written.`, "note");
     this.hint("The lease is expiring. Any worker can pick the run up.");
     const lease = 3;
     for (let s = lease; s > 0; s--) {
-      this.worker(`✗ worker-a dead · lease expires in ${s}s`, "dead");
+      this.worker(`worker-a dead · lease expires in ${s}s`, "dead");
       if (!(await this.wait(1000, token))) return false;
     }
     return true;
@@ -410,7 +428,7 @@ class KeelReplay extends HTMLElement {
     const ov = this.fork.overrides || {};
     this.$("#branch").textContent = this.fork.label;
     this.$("#log").innerHTML = "";
-    this.worker(`fork at ${this.fork.from_step} · model ${ov.model ?? "same"} · effects ${ov.effects ?? "inherit"}`, "ok");
+    this.worker(`fork at ${this.fork.from_step} · model ${ov.model ?? "same"} · effects ${ov.effects ?? "inherit"}`, "live");
     this.hint("History before the fork point is shared, not copied. Refunds in this branch are simulated.");
     let prevAt = null;
     for (const ev of this.fork.events) {
@@ -436,18 +454,18 @@ class KeelReplay extends HTMLElement {
     };
     const o = d.outcome;
     this.$("#diff").innerHTML = `
-      <h4><span>diff ${esc(d.a)} ↔ ${esc(d.b)}</span><span class="badge">${o?.same_outcome ? "same outcome" : "different outcome"}</span></h4>
+      <h4><span>Diff ${esc(d.a)} ↔ ${esc(d.b)}</span><span class="badge">${o?.same_outcome ? "✓ same outcome" : "outcome changed"}</span></h4>
       <div class="cols">
-        <div><div class="sub">trajectory (aligned by step id)</div><div class="traj">${traj}</div></div>
+        <div><div class="sub mono">Trajectory · aligned by step id</div><div class="traj">${traj}</div></div>
         <div class="bars">
-          <div class="sub"><span style="color:var(--keel-accent)">■</span> ${esc(d.a)} &nbsp; <span style="color:var(--keel-ok)">■</span> ${esc(d.b)}</div>
+          <div class="sub mono"><span class="key"></span>${esc(d.a)} &nbsp; <span class="key b"></span>${esc(d.b)}</div>
           ${bar("tokens", e.a.tokens_in + e.a.tokens_out, e.b.tokens_in + e.b.tokens_out, (v) => v.toLocaleString())}
           ${bar("cost", e.a.cost_micros, e.b.cost_micros, usd)}
           ${bar("model+tool", e.a.active_ms, e.b.active_ms, (v) => `${(v / 1000).toFixed(1)}s`)}
         </div>
       </div>
-      ${last ? `<div class="cols" style="margin-top:12px"><div><div class="sub">${esc(d.a)} · ${esc(last.step_id)}</div><div class="msg">${esc(last.a)}</div></div><div><div class="sub">${esc(d.b)} · ${esc(last.step_id)}</div><div class="msg">${esc(last.b)}</div></div></div>` : ""}
-      <div class="sub" style="margin-top:8px">tokens ${e.tokens_delta_pct > 0 ? "+" : ""}${e.tokens_delta_pct}% · cost ${e.cost_delta_pct > 0 ? "+" : ""}${e.cost_delta_pct}% · judge “${esc(o?.judge)}”: ${o?.same_outcome ? "same decision and amount" : "outcome changed: " + esc((o?.changed_fields || []).join(", "))}</div>`;
+      ${last ? `<div class="cols" style="margin-top:12px"><div><div class="sub mono">${esc(d.a)} · ${esc(last.step_id)}</div><div class="msg">${esc(last.a)}</div></div><div><div class="sub mono">${esc(d.b)} · ${esc(last.step_id)}</div><div class="msg">${esc(last.b)}</div></div></div>` : ""}
+      <div class="sub mono" style="margin-top:10px">tokens ${e.tokens_delta_pct > 0 ? "+" : ""}${e.tokens_delta_pct}% · cost ${e.cost_delta_pct > 0 ? "+" : ""}${e.cost_delta_pct}% · judge “${esc(o?.judge)}”: ${o?.same_outcome ? "same decision and amount" : "outcome changed: " + esc((o?.changed_fields || []).join(", "))}</div>`;
     this.$("#diff").className = "panel diff show";
     this.hint("Same outcome, different model, every number measured from the recorded runs.");
   }
