@@ -1,0 +1,30 @@
+[package]
+name = "keel-sim"
+description = "KEEL deterministic simulation testing: seeded crashes, zombies, ambiguous errors, invariants 1-5"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[lib]
+name = "keel_sim"
+
+[[bin]]
+name = "keel-sim"
+path = "src/main.rs"
+
+[dependencies]
+keel-core.workspace = true
+keel-store = { workspace = true }
+keel-adapters.workspace = true
+keel-worker.workspace = true
+refund-agent.workspace = true
+async-trait.workspace = true
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["full", "test-util"] }
+uuid.workspace = true
+
+[lints]
+workspace = true

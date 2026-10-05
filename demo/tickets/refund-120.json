@@ -1,0 +1,6 @@
+{
+  "ticket_id": "T-1001",
+  "customer": "customer1@example.com",
+  "order_id": "ORD-1001",
+  "body": "My trail running shoes arrived with a torn sole. Please refund $120."
+}

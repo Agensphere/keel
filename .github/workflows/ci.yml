@@ -1,0 +1,46 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: keel
+          POSTGRES_PASSWORD: keel
+          POSTGRES_DB: keel
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U keel" --health-interval 2s --health-retries 20
+    env:
+      KEEL_TEST_DATABASE_URL: postgres://keel:keel@localhost:5432/keel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - name: DST smoke (10k seeds, determinism-checked sample)
+        run: |
+          cargo run --release -p keel-sim -- --seeds 10000
+          cargo run --release -p keel-sim -- --seeds 200 --start 424242 --check-determinism
+      - name: Chaos (real processes, fake Stripe)
+        env:
+          KEEL_DATABASE_URL: postgres://keel:keel@localhost:5432/keel
+        run: |
+          cargo build -p agensphere-keel-cli
+          ./target/debug/keel migrate
+          ./target/debug/keel demo fake-stripe --state /tmp/fake-stripe.json &
+          sleep 1
+          ./target/debug/keel demo chaos --runs 10 --lease-ms 2000 --out /tmp/chaos.json

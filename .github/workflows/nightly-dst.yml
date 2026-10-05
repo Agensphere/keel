@@ -1,0 +1,27 @@
+name: nightly-dst
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+    inputs:
+      seeds:
+        description: number of seeds
+        default: "1000000"
+
+jobs:
+  dst:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Run seeds (a different window every night)
+        run: |
+          START=$(( $(date +%s) / 86400 * 1000000 ))
+          cargo run --release -p keel-sim -- --seeds "${{ github.event.inputs.seeds || '1000000' }}" --start "$START" --out dst.jsonl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dst-report
+          path: dst.jsonl

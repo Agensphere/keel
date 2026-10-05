@@ -1,0 +1,8 @@
+/target
+.env
+.env.*
+!.env.example
+*.keel.db
+/.keel/
+node_modules/
+.keel-fake.log

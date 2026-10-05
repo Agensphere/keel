@@ -1,0 +1,33 @@
+[package]
+name = "agensphere-keel-store"
+description = "KEEL event stores: in-memory (simulation, keel dev) and Postgres"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+
+[lib]
+name = "keel_store"
+
+[features]
+default = ["postgres"]
+postgres = ["dep:sqlx"]
+
+[dependencies]
+keel-core.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx = { workspace = true, optional = true }
+tokio.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+
+[lints]
+workspace = true

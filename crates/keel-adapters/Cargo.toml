@@ -1,0 +1,29 @@
+[package]
+name = "agensphere-keel-adapters"
+description = "KEEL adapters: Azure AI Foundry / OpenAI-compatible LLMs, Stripe refunds, mock tier A-D services"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+
+[lib]
+name = "keel_adapters"
+
+[dependencies]
+keel-core.workspace = true
+async-trait.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full", "test-util"] }
+
+[lints]
+workspace = true

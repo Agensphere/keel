@@ -1,0 +1,57 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/keel-core",
+    "crates/keel-store",
+    "crates/keel-adapters",
+    "crates/keel-worker",
+    "crates/keel-sim",
+    "crates/keel-cli",
+    "crates/keel",
+    "examples/refund-agent",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/agensphere/keel"
+homepage = "https://agensphere.com/keel"
+authors = ["Agensphere <hello@agensphere.com>"]
+
+[workspace.dependencies]
+# internal (published under the agensphere-keel namespace, imported as keel_*)
+keel-core = { package = "agensphere-keel-core", path = "crates/keel-core", version = "0.1.0" }
+keel-store = { package = "agensphere-keel-store", path = "crates/keel-store", version = "0.1.0" }
+keel-adapters = { package = "agensphere-keel-adapters", path = "crates/keel-adapters", version = "0.1.0" }
+keel-worker = { package = "agensphere-keel-worker", path = "crates/keel-worker", version = "0.1.0" }
+keel = { package = "agensphere-keel", path = "crates/keel", version = "0.1.0" }
+refund-agent = { path = "examples/refund-agent" }
+
+# external
+anyhow = "1"
+axum = "0.8"
+async-trait = "0.1"
+clap = { version = "4", features = ["derive", "env"] }
+futures = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+sha2 = "0.10"
+similar = "2"
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "postgres", "uuid", "json", "macros", "migrate", "tls-rustls"] }
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid = { version = "1", features = ["v4", "v7", "serde"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+
+[profile.release]
+lto = "thin"

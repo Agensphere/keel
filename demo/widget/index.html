@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KEEL replay widget</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; padding: 32px 16px; font-family: system-ui, sans-serif; background: Canvas; color: CanvasText; }
+    main { max-width: 1040px; margin: 0 auto; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p { margin: 0 0 20px; opacity: .75; }
+    /* Example brand override: the website maps its tokens onto these. */
+    keel-replay.branded { --keel-accent: #6d28d9; --keel-radius: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>The agent crashed after calling Stripe. Did the customer get refunded zero times, once, or twice?</h1>
+    <p>Serve this folder's parent over HTTP (<code>python3 -m http.server -d demo</code>) and open <code>/widget/</code>.</p>
+    <keel-replay class="branded" src="../recordings/flagship.json" chaos-src="../recordings/chaos-summary.json"></keel-replay>
+  </main>
+  <script type="module" src="./keel-replay.js"></script>
+</body>
+</html>

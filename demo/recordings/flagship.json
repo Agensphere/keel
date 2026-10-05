@@ -1,0 +1,1357 @@
+{
+  "schema": "keel.recording/v1",
+  "exported_at_ms": 1791232060606,
+  "run": {
+    "run_id": "01a10dbe-0372-7767-9b4a-63a1cec60e01",
+    "workflow": "refund_agent",
+    "workflow_version": "1.0.0",
+    "created_at_ms": 1791231918962,
+    "input": {
+      "ticket_id": "T-5001",
+      "customer": "customer2@example.com",
+      "order_id": "ORD-1002",
+      "body": "My trail running shoes arrived damaged. Please refund $120."
+    },
+    "config": {
+      "model": "primary"
+    }
+  },
+  "branches": [
+    {
+      "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+      "label": "main",
+      "parent_branch": null,
+      "fork_seq": null,
+      "from_step": null,
+      "overrides": {},
+      "status": "completed",
+      "output": {
+        "turns": 3,
+        "refund": {
+          "id": "re_fake_000069",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000048"
+        },
+        "message": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+        "decision": "refunded",
+        "ticket_id": "T-5001"
+      },
+      "chain_ok": true,
+      "events": [
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 0,
+          "epoch": 0,
+          "at_ms": 1791231918962,
+          "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "hash": "5f31b87b8f17fbbc9e6c8cbbd7482d69db03ceb868d3011489e2bc51b9f3e4a4",
+          "body": {
+            "type": "RunStarted",
+            "workflow": "refund_agent",
+            "workflow_version": "1.0.0",
+            "input": {
+              "ticket_id": "T-5001",
+              "customer": "customer2@example.com",
+              "order_id": "ORD-1002",
+              "body": "My trail running shoes arrived damaged. Please refund $120."
+            },
+            "config": {
+              "model": "primary"
+            },
+            "history_format": 1
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 1,
+          "epoch": 1,
+          "at_ms": 1791231919008,
+          "prev_hash": "5f31b87b8f17fbbc9e6c8cbbd7482d69db03ceb868d3011489e2bc51b9f3e4a4",
+          "hash": "69d9e0f0bf6f4d1ba12c8c4bdb2383fa3d0ff50a4695a956090897b723dd0a0f",
+          "body": {
+            "type": "LlmRequested",
+            "step_id": "triage#1",
+            "fingerprint": "4d3cc3c1da68aa64fa5758c228b24fe1389511040f62c1b09b48508146918c8d",
+            "request": {
+              "model": "primary",
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a customer-support agent for an online store. Resolve the ticket. Always call lookup_order before deciding. Refund only for an order that exists, is paid, and only up to the amount the customer asked for (never more than the order total). Use issue_refund to refund. When you are done, reply to the customer in two sentences or fewer."
+                },
+                {
+                  "role": "user",
+                  "content": "Ticket T-5001 from customer2@example.com about order ORD-1002:\nMy trail running shoes arrived damaged. Please refund $120."
+                }
+              ],
+              "tools": [
+                {
+                  "name": "lookup_order",
+                  "description": "Look up an order by id. Returns customer, total and payment status.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "issue_refund",
+                  "description": "Refund part or all of a paid order to the original payment method.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "amount_cents": {
+                        "type": "integer",
+                        "description": "Amount to refund, in cents"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id",
+                      "amount_cents"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "max_tokens": 800
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 2,
+          "epoch": 1,
+          "at_ms": 1791231920189,
+          "prev_hash": "69d9e0f0bf6f4d1ba12c8c4bdb2383fa3d0ff50a4695a956090897b723dd0a0f",
+          "hash": "6b51a9167b4f973b405f212cb7c48911027954a7bd607523ccc425a813e7b814",
+          "body": {
+            "type": "LlmCompleted",
+            "step_id": "triage#1",
+            "response": {
+              "tool_calls": [
+                {
+                  "id": "call_0",
+                  "name": "lookup_order",
+                  "arguments": {
+                    "order_id": "ORD-1002"
+                  }
+                }
+              ],
+              "usage": {
+                "input_tokens": 237,
+                "output_tokens": 14
+              },
+              "model": "scripted-primary",
+              "provider": "scripted",
+              "finish_reason": "tool_calls",
+              "latency_ms": 1176,
+              "cost_micros": 586
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 3,
+          "epoch": 1,
+          "at_ms": 1791231920196,
+          "prev_hash": "6b51a9167b4f973b405f212cb7c48911027954a7bd607523ccc425a813e7b814",
+          "hash": "94d34934972b11abc985b7916bcd845dff16889442775c00463019c72bce5345",
+          "body": {
+            "type": "EffectIntent",
+            "step_id": "lookup#1",
+            "idem_key": "keel_6298fe9a8a8c68c00891685150562878bf9981945981afa5",
+            "adapter": "orders.lookup",
+            "class": "idempotent",
+            "tier": "A",
+            "args": {
+              "order_id": "ORD-1002"
+            },
+            "args_hash": "607c2fe3feb08ca2d22c6248dd10484c8a9e2a0b239284ca9ca612819fe9cebd",
+            "simulated": false
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 4,
+          "epoch": 1,
+          "at_ms": 1791231920207,
+          "prev_hash": "94d34934972b11abc985b7916bcd845dff16889442775c00463019c72bce5345",
+          "hash": "945a5a9ef9a4e0841a2b60f16dad3b355aa741293ee989b3d648c13eb894bfee",
+          "body": {
+            "type": "EffectCommitted",
+            "step_id": "lookup#1",
+            "idem_key": "keel_6298fe9a8a8c68c00891685150562878bf9981945981afa5",
+            "output": {
+              "order_id": "ORD-1002",
+              "customer": "customer2@example.com",
+              "amount_cents": 12000,
+              "payment_intent": "pi_fake_000048",
+              "status": "paid",
+              "item": "Trail running shoes"
+            },
+            "source": "executed"
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 5,
+          "epoch": 1,
+          "at_ms": 1791231920213,
+          "prev_hash": "945a5a9ef9a4e0841a2b60f16dad3b355aa741293ee989b3d648c13eb894bfee",
+          "hash": "b7f45a23d231fc173c13f1873dcc261ef8f058aba8eca8b9df0c7349a3abe33d",
+          "body": {
+            "type": "LlmRequested",
+            "step_id": "triage#2",
+            "fingerprint": "1368c1e4d6e66209cc32aa08dda02a852821c8e4e2cf77c388786aa20f88f6f5",
+            "request": {
+              "model": "primary",
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a customer-support agent for an online store. Resolve the ticket. Always call lookup_order before deciding. Refund only for an order that exists, is paid, and only up to the amount the customer asked for (never more than the order total). Use issue_refund to refund. When you are done, reply to the customer in two sentences or fewer."
+                },
+                {
+                  "role": "user",
+                  "content": "Ticket T-5001 from customer2@example.com about order ORD-1002:\nMy trail running shoes arrived damaged. Please refund $120."
+                },
+                {
+                  "role": "assistant",
+                  "tool_calls": [
+                    {
+                      "id": "call_0",
+                      "name": "lookup_order",
+                      "arguments": {
+                        "order_id": "ORD-1002"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "tool",
+                  "content": "{\"order_id\":\"ORD-1002\",\"customer\":\"customer2@example.com\",\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\",\"status\":\"paid\",\"item\":\"Trail running shoes\"}",
+                  "tool_call_id": "call_0"
+                }
+              ],
+              "tools": [
+                {
+                  "name": "lookup_order",
+                  "description": "Look up an order by id. Returns customer, total and payment status.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "issue_refund",
+                  "description": "Refund part or all of a paid order to the original payment method.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "amount_cents": {
+                        "type": "integer",
+                        "description": "Amount to refund, in cents"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id",
+                      "amount_cents"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "max_tokens": 800
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 6,
+          "epoch": 1,
+          "at_ms": 1791231920709,
+          "prev_hash": "b7f45a23d231fc173c13f1873dcc261ef8f058aba8eca8b9df0c7349a3abe33d",
+          "hash": "a17303a89447e15351b223b338b71cc0e2409951d58be4978a8c11c29df66185",
+          "body": {
+            "type": "LlmCompleted",
+            "step_id": "triage#2",
+            "response": {
+              "tool_calls": [
+                {
+                  "id": "call_1",
+                  "name": "issue_refund",
+                  "arguments": {
+                    "order_id": "ORD-1002",
+                    "amount_cents": 12000,
+                    "reason": "requested_by_customer"
+                  }
+                }
+              ],
+              "usage": {
+                "input_tokens": 277,
+                "output_tokens": 28
+              },
+              "model": "scripted-primary",
+              "provider": "scripted",
+              "finish_reason": "tool_calls",
+              "latency_ms": 491,
+              "cost_micros": 778
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 7,
+          "epoch": 1,
+          "at_ms": 1791231920715,
+          "prev_hash": "a17303a89447e15351b223b338b71cc0e2409951d58be4978a8c11c29df66185",
+          "hash": "71021190bdbae23df559db20aea9fa46b7f8c06fbaf84d2f5f8a59e0e9573f0f",
+          "body": {
+            "type": "EffectIntent",
+            "step_id": "refund#1",
+            "idem_key": "keel_a9bcbad76988f42c60fcee63488fdaca39b3da0ab536268b",
+            "adapter": "stripe.refund",
+            "class": "irreversible",
+            "tier": "A",
+            "args": {
+              "payment_intent": "pi_fake_000048",
+              "amount_cents": 12000,
+              "reason": "requested_by_customer"
+            },
+            "args_hash": "3294ed73e39836bc01cb5284578b0f6e72e471cb1a98e4b40dfc8d30ce8abf73",
+            "simulated": false
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 8,
+          "epoch": 2,
+          "at_ms": 1791231923054,
+          "prev_hash": "71021190bdbae23df559db20aea9fa46b7f8c06fbaf84d2f5f8a59e0e9573f0f",
+          "hash": "d2c0d6b428cbe1960f69499ded39ec74b9252481fa132af7dc6e934f1a2ad8a5",
+          "body": {
+            "type": "EffectCommitted",
+            "step_id": "refund#1",
+            "idem_key": "keel_a9bcbad76988f42c60fcee63488fdaca39b3da0ab536268b",
+            "output": {
+              "id": "re_fake_000069",
+              "status": "succeeded",
+              "amount_cents": 12000,
+              "payment_intent": "pi_fake_000048"
+            },
+            "source": "executed"
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 9,
+          "epoch": 2,
+          "at_ms": 1791231923060,
+          "prev_hash": "d2c0d6b428cbe1960f69499ded39ec74b9252481fa132af7dc6e934f1a2ad8a5",
+          "hash": "7f197b374c5c0c7e910564dfe1309e0386fe2d714043562e65de7fa949478974",
+          "body": {
+            "type": "LlmRequested",
+            "step_id": "triage#3",
+            "fingerprint": "423c6345be6e7cbf8a5b0e9939c87f5e1837233f82bdb2f1d93c7b93607963a7",
+            "request": {
+              "model": "primary",
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a customer-support agent for an online store. Resolve the ticket. Always call lookup_order before deciding. Refund only for an order that exists, is paid, and only up to the amount the customer asked for (never more than the order total). Use issue_refund to refund. When you are done, reply to the customer in two sentences or fewer."
+                },
+                {
+                  "role": "user",
+                  "content": "Ticket T-5001 from customer2@example.com about order ORD-1002:\nMy trail running shoes arrived damaged. Please refund $120."
+                },
+                {
+                  "role": "assistant",
+                  "tool_calls": [
+                    {
+                      "id": "call_0",
+                      "name": "lookup_order",
+                      "arguments": {
+                        "order_id": "ORD-1002"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "tool",
+                  "content": "{\"order_id\":\"ORD-1002\",\"customer\":\"customer2@example.com\",\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\",\"status\":\"paid\",\"item\":\"Trail running shoes\"}",
+                  "tool_call_id": "call_0"
+                },
+                {
+                  "role": "assistant",
+                  "tool_calls": [
+                    {
+                      "id": "call_1",
+                      "name": "issue_refund",
+                      "arguments": {
+                        "order_id": "ORD-1002",
+                        "amount_cents": 12000,
+                        "reason": "requested_by_customer"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "tool",
+                  "content": "{\"id\":\"re_fake_000069\",\"status\":\"succeeded\",\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\"}",
+                  "tool_call_id": "call_1"
+                }
+              ],
+              "tools": [
+                {
+                  "name": "lookup_order",
+                  "description": "Look up an order by id. Returns customer, total and payment status.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "issue_refund",
+                  "description": "Refund part or all of a paid order to the original payment method.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "amount_cents": {
+                        "type": "integer",
+                        "description": "Amount to refund, in cents"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id",
+                      "amount_cents"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "max_tokens": 800
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 10,
+          "epoch": 2,
+          "at_ms": 1791231923957,
+          "prev_hash": "7f197b374c5c0c7e910564dfe1309e0386fe2d714043562e65de7fa949478974",
+          "hash": "d9281591ae040290aefe0af7e813f574e68e1ac0cb33c4f831313fbc15080797",
+          "body": {
+            "type": "LlmCompleted",
+            "step_id": "triage#3",
+            "response": {
+              "content": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+              "usage": {
+                "input_tokens": 302,
+                "output_tokens": 33
+              },
+              "model": "scripted-primary",
+              "provider": "scripted",
+              "finish_reason": "stop",
+              "latency_ms": 890,
+              "cost_micros": 868
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+          "seq": 11,
+          "epoch": 2,
+          "at_ms": 1791231923959,
+          "prev_hash": "d9281591ae040290aefe0af7e813f574e68e1ac0cb33c4f831313fbc15080797",
+          "hash": "2635dc50824231eafe7226856138a1fad237c8dbe5c9128870fabf82d83cd524",
+          "body": {
+            "type": "RunCompleted",
+            "output": {
+              "ticket_id": "T-5001",
+              "decision": "refunded",
+              "message": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+              "refund": {
+                "id": "re_fake_000069",
+                "status": "succeeded",
+                "amount_cents": 12000,
+                "payment_intent": "pi_fake_000048"
+              },
+              "turns": 3
+            }
+          }
+        }
+      ],
+      "workers": [
+        {
+          "epoch": 1,
+          "first_seq": 1,
+          "last_seq": 7,
+          "start_ms": 1791231919008,
+          "end_ms": 1791231920715,
+          "replayed_steps": 0
+        },
+        {
+          "epoch": 2,
+          "first_seq": 8,
+          "last_seq": 11,
+          "start_ms": 1791231923054,
+          "end_ms": 1791231923959,
+          "replayed_steps": 3
+        }
+      ],
+      "view": {
+        "label": "main",
+        "steps": [
+          {
+            "step_id": "triage#1",
+            "kind": "llm",
+            "content": "→ lookup_order({\"order_id\":\"ORD-1002\"})",
+            "model": "scripted-primary",
+            "tokens_in": 237,
+            "tokens_out": 14,
+            "cost_micros": 586,
+            "duration_ms": 1176,
+            "source": "executed",
+            "at_ms": 1791231920189,
+            "shared": false
+          },
+          {
+            "step_id": "lookup#1",
+            "kind": "effect",
+            "content": "{\"order_id\":\"ORD-1002\"} ⇒ {\"amount_cents\":12000,\"customer\":\"customer2@example.com\",\"item\":\"Trail running shoes\",\"order_id\":\"ORD-1002\",\"payment_intent\":\"pi_fake_000048\",\"status\":\"paid\"}",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_micros": 0,
+            "duration_ms": 11,
+            "source": "executed",
+            "at_ms": 1791231920207,
+            "shared": false
+          },
+          {
+            "step_id": "triage#2",
+            "kind": "llm",
+            "content": "→ issue_refund({\"amount_cents\":12000,\"order_id\":\"ORD-1002\",\"reason\":\"requested_by_customer\"})",
+            "model": "scripted-primary",
+            "tokens_in": 277,
+            "tokens_out": 28,
+            "cost_micros": 778,
+            "duration_ms": 491,
+            "source": "executed",
+            "at_ms": 1791231920709,
+            "shared": false
+          },
+          {
+            "step_id": "refund#1",
+            "kind": "effect",
+            "content": "{\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\",\"reason\":\"requested_by_customer\"} ⇒ {\"amount_cents\":12000,\"id\":\"re_fake_000069\",\"payment_intent\":\"pi_fake_000048\",\"status\":\"succeeded\"}",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_micros": 0,
+            "duration_ms": 2339,
+            "source": "executed",
+            "at_ms": 1791231923054,
+            "shared": false
+          },
+          {
+            "step_id": "triage#3",
+            "kind": "llm",
+            "content": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+            "model": "scripted-primary",
+            "tokens_in": 302,
+            "tokens_out": 33,
+            "cost_micros": 868,
+            "duration_ms": 890,
+            "source": "executed",
+            "at_ms": 1791231923957,
+            "shared": false
+          }
+        ],
+        "output": {
+          "ticket_id": "T-5001",
+          "decision": "refunded",
+          "message": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+          "refund": {
+            "id": "re_fake_000069",
+            "status": "succeeded",
+            "amount_cents": 12000,
+            "payment_intent": "pi_fake_000048"
+          },
+          "turns": 3
+        },
+        "terminal": "completed",
+        "economics": {
+          "steps": 5,
+          "llm_calls": 3,
+          "effects": 2,
+          "simulated_effects": 0,
+          "tokens_in": 816,
+          "tokens_out": 75,
+          "cost_micros": 2232,
+          "active_ms": 4907
+        }
+      }
+    },
+    {
+      "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+      "label": "alt",
+      "parent_branch": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+      "fork_seq": 1,
+      "from_step": "triage#1",
+      "overrides": {
+        "model": "alt",
+        "effects": "simulate"
+      },
+      "status": "completed",
+      "output": {
+        "turns": 3,
+        "refund": {
+          "id": "re_fake_000069",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000048"
+        },
+        "message": "Refunded $120.00. Expect it in 5–10 days.",
+        "decision": "refunded",
+        "ticket_id": "T-5001"
+      },
+      "chain_ok": true,
+      "events": [
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 1,
+          "epoch": 0,
+          "at_ms": 1791232022023,
+          "prev_hash": "5f31b87b8f17fbbc9e6c8cbbd7482d69db03ceb868d3011489e2bc51b9f3e4a4",
+          "hash": "e80d825b48321164458129fe0de176aa0b3deaba5494290091e3e220574c6b97",
+          "body": {
+            "type": "Forked",
+            "parent_branch": "01a10dbe-0372-7767-9b4a-63a2496ca2f7",
+            "fork_seq": 1,
+            "from_step": "triage#1",
+            "overrides": {
+              "model": "alt",
+              "effects": "simulate"
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 2,
+          "epoch": 1,
+          "at_ms": 1791232022051,
+          "prev_hash": "e80d825b48321164458129fe0de176aa0b3deaba5494290091e3e220574c6b97",
+          "hash": "53906ecfcb017caf9f74c5a63233389b6fcb4e9d7e9882ee7a0030245499c8fb",
+          "body": {
+            "type": "LlmRequested",
+            "step_id": "triage#1",
+            "fingerprint": "fd6a32066d711571aabcf26dfd877db2f9dac8183b60a978f23bfeec5c2aba90",
+            "request": {
+              "model": "alt",
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a customer-support agent for an online store. Resolve the ticket. Always call lookup_order before deciding. Refund only for an order that exists, is paid, and only up to the amount the customer asked for (never more than the order total). Use issue_refund to refund. When you are done, reply to the customer in two sentences or fewer."
+                },
+                {
+                  "role": "user",
+                  "content": "Ticket T-5001 from customer2@example.com about order ORD-1002:\nMy trail running shoes arrived damaged. Please refund $120."
+                }
+              ],
+              "tools": [
+                {
+                  "name": "lookup_order",
+                  "description": "Look up an order by id. Returns customer, total and payment status.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "issue_refund",
+                  "description": "Refund part or all of a paid order to the original payment method.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "amount_cents": {
+                        "type": "integer",
+                        "description": "Amount to refund, in cents"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id",
+                      "amount_cents"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "max_tokens": 800
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 3,
+          "epoch": 1,
+          "at_ms": 1791232022886,
+          "prev_hash": "53906ecfcb017caf9f74c5a63233389b6fcb4e9d7e9882ee7a0030245499c8fb",
+          "hash": "1be2007d9c0a2c23ed01958d6e97158cb082a4e06efab5e92e71f5b36bf06ffd",
+          "body": {
+            "type": "LlmCompleted",
+            "step_id": "triage#1",
+            "response": {
+              "tool_calls": [
+                {
+                  "id": "call_0",
+                  "name": "lookup_order",
+                  "arguments": {
+                    "order_id": "ORD-1002"
+                  }
+                }
+              ],
+              "usage": {
+                "input_tokens": 237,
+                "output_tokens": 14
+              },
+              "model": "scripted-alt",
+              "provider": "scripted",
+              "finish_reason": "tool_calls",
+              "latency_ms": 829,
+              "cost_micros": 117
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 4,
+          "epoch": 1,
+          "at_ms": 1791232022902,
+          "prev_hash": "1be2007d9c0a2c23ed01958d6e97158cb082a4e06efab5e92e71f5b36bf06ffd",
+          "hash": "3c9e43d9f12ec9687ffcddeec608808ee7244c042d1e4c1063276632ac954f9e",
+          "body": {
+            "type": "EffectIntent",
+            "step_id": "lookup#1",
+            "idem_key": "keel_98b22fb60aa3a7bbacf3dcea6024aefd72851844d2b3c00b",
+            "adapter": "orders.lookup",
+            "class": "idempotent",
+            "tier": "A",
+            "args": {
+              "order_id": "ORD-1002"
+            },
+            "args_hash": "607c2fe3feb08ca2d22c6248dd10484c8a9e2a0b239284ca9ca612819fe9cebd",
+            "simulated": false
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 5,
+          "epoch": 1,
+          "at_ms": 1791232022907,
+          "prev_hash": "3c9e43d9f12ec9687ffcddeec608808ee7244c042d1e4c1063276632ac954f9e",
+          "hash": "ed5dbafc82a2fe64e5033e731f51f4ec281023708c775c0bbe0077a46441fecb",
+          "body": {
+            "type": "EffectCommitted",
+            "step_id": "lookup#1",
+            "idem_key": "keel_98b22fb60aa3a7bbacf3dcea6024aefd72851844d2b3c00b",
+            "output": {
+              "order_id": "ORD-1002",
+              "customer": "customer2@example.com",
+              "amount_cents": 12000,
+              "payment_intent": "pi_fake_000048",
+              "status": "paid",
+              "item": "Trail running shoes"
+            },
+            "source": "executed"
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 6,
+          "epoch": 1,
+          "at_ms": 1791232022914,
+          "prev_hash": "ed5dbafc82a2fe64e5033e731f51f4ec281023708c775c0bbe0077a46441fecb",
+          "hash": "f1b720888ee57869a4feb308ac01af19e34a86794d36596764facca5867dc69f",
+          "body": {
+            "type": "LlmRequested",
+            "step_id": "triage#2",
+            "fingerprint": "d0f32b9facea65c7fc1f1fa0a0ee0db49e26859e7441afcd2b8d559dce635e0e",
+            "request": {
+              "model": "alt",
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a customer-support agent for an online store. Resolve the ticket. Always call lookup_order before deciding. Refund only for an order that exists, is paid, and only up to the amount the customer asked for (never more than the order total). Use issue_refund to refund. When you are done, reply to the customer in two sentences or fewer."
+                },
+                {
+                  "role": "user",
+                  "content": "Ticket T-5001 from customer2@example.com about order ORD-1002:\nMy trail running shoes arrived damaged. Please refund $120."
+                },
+                {
+                  "role": "assistant",
+                  "tool_calls": [
+                    {
+                      "id": "call_0",
+                      "name": "lookup_order",
+                      "arguments": {
+                        "order_id": "ORD-1002"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "tool",
+                  "content": "{\"order_id\":\"ORD-1002\",\"customer\":\"customer2@example.com\",\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\",\"status\":\"paid\",\"item\":\"Trail running shoes\"}",
+                  "tool_call_id": "call_0"
+                }
+              ],
+              "tools": [
+                {
+                  "name": "lookup_order",
+                  "description": "Look up an order by id. Returns customer, total and payment status.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "issue_refund",
+                  "description": "Refund part or all of a paid order to the original payment method.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "amount_cents": {
+                        "type": "integer",
+                        "description": "Amount to refund, in cents"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id",
+                      "amount_cents"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "max_tokens": 800
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 7,
+          "epoch": 1,
+          "at_ms": 1791232023564,
+          "prev_hash": "f1b720888ee57869a4feb308ac01af19e34a86794d36596764facca5867dc69f",
+          "hash": "28ca55492e8a66cda5306df8935b5db9f73727f5c9d531aff0fc59aca14a9b6a",
+          "body": {
+            "type": "LlmCompleted",
+            "step_id": "triage#2",
+            "response": {
+              "tool_calls": [
+                {
+                  "id": "call_1",
+                  "name": "issue_refund",
+                  "arguments": {
+                    "order_id": "ORD-1002",
+                    "amount_cents": 12000,
+                    "reason": "requested_by_customer"
+                  }
+                }
+              ],
+              "usage": {
+                "input_tokens": 277,
+                "output_tokens": 28
+              },
+              "model": "scripted-alt",
+              "provider": "scripted",
+              "finish_reason": "tool_calls",
+              "latency_ms": 644,
+              "cost_micros": 155
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 8,
+          "epoch": 1,
+          "at_ms": 1791232023574,
+          "prev_hash": "28ca55492e8a66cda5306df8935b5db9f73727f5c9d531aff0fc59aca14a9b6a",
+          "hash": "af560e6fc4cf54c091b3ff325cfd850f2f5e8ba5a72dd92d957ca7fdb24288a9",
+          "body": {
+            "type": "EffectIntent",
+            "step_id": "refund#1",
+            "idem_key": "keel_492bae84f5536f84365349fb178046ed32e6fe3edca4bd5f",
+            "adapter": "stripe.refund",
+            "class": "irreversible",
+            "tier": "A",
+            "args": {
+              "payment_intent": "pi_fake_000048",
+              "amount_cents": 12000,
+              "reason": "requested_by_customer"
+            },
+            "args_hash": "3294ed73e39836bc01cb5284578b0f6e72e471cb1a98e4b40dfc8d30ce8abf73",
+            "simulated": true
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 9,
+          "epoch": 1,
+          "at_ms": 1791232023574,
+          "prev_hash": "af560e6fc4cf54c091b3ff325cfd850f2f5e8ba5a72dd92d957ca7fdb24288a9",
+          "hash": "010f929a2dde41ca705e9fee15911db6bae4b245a8d95919031f5e4c212dab9d",
+          "body": {
+            "type": "EffectCommitted",
+            "step_id": "refund#1",
+            "idem_key": "keel_492bae84f5536f84365349fb178046ed32e6fe3edca4bd5f",
+            "output": {
+              "id": "re_fake_000069",
+              "status": "succeeded",
+              "amount_cents": 12000,
+              "payment_intent": "pi_fake_000048"
+            },
+            "source": "simulated:parent"
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 10,
+          "epoch": 1,
+          "at_ms": 1791232023581,
+          "prev_hash": "010f929a2dde41ca705e9fee15911db6bae4b245a8d95919031f5e4c212dab9d",
+          "hash": "276b24d73fa8bb7ba03e7a2bfd0ef7f8994daa1d06c99d89e4a5d5216375a33e",
+          "body": {
+            "type": "LlmRequested",
+            "step_id": "triage#3",
+            "fingerprint": "001f8cdf96b41185da8e45501540a9723e06a6b21c30935796837ba7d7442ede",
+            "request": {
+              "model": "alt",
+              "messages": [
+                {
+                  "role": "system",
+                  "content": "You are a customer-support agent for an online store. Resolve the ticket. Always call lookup_order before deciding. Refund only for an order that exists, is paid, and only up to the amount the customer asked for (never more than the order total). Use issue_refund to refund. When you are done, reply to the customer in two sentences or fewer."
+                },
+                {
+                  "role": "user",
+                  "content": "Ticket T-5001 from customer2@example.com about order ORD-1002:\nMy trail running shoes arrived damaged. Please refund $120."
+                },
+                {
+                  "role": "assistant",
+                  "tool_calls": [
+                    {
+                      "id": "call_0",
+                      "name": "lookup_order",
+                      "arguments": {
+                        "order_id": "ORD-1002"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "tool",
+                  "content": "{\"order_id\":\"ORD-1002\",\"customer\":\"customer2@example.com\",\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\",\"status\":\"paid\",\"item\":\"Trail running shoes\"}",
+                  "tool_call_id": "call_0"
+                },
+                {
+                  "role": "assistant",
+                  "tool_calls": [
+                    {
+                      "id": "call_1",
+                      "name": "issue_refund",
+                      "arguments": {
+                        "order_id": "ORD-1002",
+                        "amount_cents": 12000,
+                        "reason": "requested_by_customer"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "tool",
+                  "content": "{\"id\":\"re_fake_000069\",\"status\":\"succeeded\",\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\"}",
+                  "tool_call_id": "call_1"
+                }
+              ],
+              "tools": [
+                {
+                  "name": "lookup_order",
+                  "description": "Look up an order by id. Returns customer, total and payment status.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "issue_refund",
+                  "description": "Refund part or all of a paid order to the original payment method.",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "amount_cents": {
+                        "type": "integer",
+                        "description": "Amount to refund, in cents"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "order_id",
+                      "amount_cents"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "max_tokens": 800
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 11,
+          "epoch": 1,
+          "at_ms": 1791232024509,
+          "prev_hash": "276b24d73fa8bb7ba03e7a2bfd0ef7f8994daa1d06c99d89e4a5d5216375a33e",
+          "hash": "6a51213d368cd0f2957dfe18f8d8834638dc3678fa5e919548a5527f54b422a9",
+          "body": {
+            "type": "LlmCompleted",
+            "step_id": "triage#3",
+            "response": {
+              "content": "Refunded $120.00. Expect it in 5–10 days.",
+              "usage": {
+                "input_tokens": 302,
+                "output_tokens": 11
+              },
+              "model": "scripted-alt",
+              "provider": "scripted",
+              "finish_reason": "stop",
+              "latency_ms": 921,
+              "cost_micros": 138
+            }
+          }
+        },
+        {
+          "branch_id": "01a10dbf-960b-776d-8307-6f26f35e7945",
+          "seq": 12,
+          "epoch": 1,
+          "at_ms": 1791232024514,
+          "prev_hash": "6a51213d368cd0f2957dfe18f8d8834638dc3678fa5e919548a5527f54b422a9",
+          "hash": "5f87b781331109c425ddcb01917428171c8f685c03755c873c567e4cb5c665bc",
+          "body": {
+            "type": "RunCompleted",
+            "output": {
+              "ticket_id": "T-5001",
+              "decision": "refunded",
+              "message": "Refunded $120.00. Expect it in 5–10 days.",
+              "refund": {
+                "id": "re_fake_000069",
+                "status": "succeeded",
+                "amount_cents": 12000,
+                "payment_intent": "pi_fake_000048"
+              },
+              "turns": 3
+            }
+          }
+        }
+      ],
+      "workers": [
+        {
+          "epoch": 1,
+          "first_seq": 2,
+          "last_seq": 12,
+          "start_ms": 1791232022051,
+          "end_ms": 1791232024514,
+          "replayed_steps": 0
+        }
+      ],
+      "view": {
+        "label": "alt",
+        "steps": [
+          {
+            "step_id": "triage#1",
+            "kind": "llm",
+            "content": "→ lookup_order({\"order_id\":\"ORD-1002\"})",
+            "model": "scripted-alt",
+            "tokens_in": 237,
+            "tokens_out": 14,
+            "cost_micros": 117,
+            "duration_ms": 829,
+            "source": "executed",
+            "at_ms": 1791232022886,
+            "shared": false
+          },
+          {
+            "step_id": "lookup#1",
+            "kind": "effect",
+            "content": "{\"order_id\":\"ORD-1002\"} ⇒ {\"amount_cents\":12000,\"customer\":\"customer2@example.com\",\"item\":\"Trail running shoes\",\"order_id\":\"ORD-1002\",\"payment_intent\":\"pi_fake_000048\",\"status\":\"paid\"}",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_micros": 0,
+            "duration_ms": 5,
+            "source": "executed",
+            "at_ms": 1791232022907,
+            "shared": false
+          },
+          {
+            "step_id": "triage#2",
+            "kind": "llm",
+            "content": "→ issue_refund({\"amount_cents\":12000,\"order_id\":\"ORD-1002\",\"reason\":\"requested_by_customer\"})",
+            "model": "scripted-alt",
+            "tokens_in": 277,
+            "tokens_out": 28,
+            "cost_micros": 155,
+            "duration_ms": 644,
+            "source": "executed",
+            "at_ms": 1791232023564,
+            "shared": false
+          },
+          {
+            "step_id": "refund#1",
+            "kind": "effect",
+            "content": "{\"amount_cents\":12000,\"payment_intent\":\"pi_fake_000048\",\"reason\":\"requested_by_customer\"} ⇒ {\"amount_cents\":12000,\"id\":\"re_fake_000069\",\"payment_intent\":\"pi_fake_000048\",\"status\":\"succeeded\"}",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost_micros": 0,
+            "duration_ms": 0,
+            "source": "simulated:parent",
+            "at_ms": 1791232023574,
+            "shared": false
+          },
+          {
+            "step_id": "triage#3",
+            "kind": "llm",
+            "content": "Refunded $120.00. Expect it in 5–10 days.",
+            "model": "scripted-alt",
+            "tokens_in": 302,
+            "tokens_out": 11,
+            "cost_micros": 138,
+            "duration_ms": 921,
+            "source": "executed",
+            "at_ms": 1791232024509,
+            "shared": false
+          }
+        ],
+        "output": {
+          "ticket_id": "T-5001",
+          "decision": "refunded",
+          "message": "Refunded $120.00. Expect it in 5–10 days.",
+          "refund": {
+            "id": "re_fake_000069",
+            "status": "succeeded",
+            "amount_cents": 12000,
+            "payment_intent": "pi_fake_000048"
+          },
+          "turns": 3
+        },
+        "terminal": "completed",
+        "economics": {
+          "steps": 5,
+          "llm_calls": 3,
+          "effects": 2,
+          "simulated_effects": 1,
+          "tokens_in": 816,
+          "tokens_out": 53,
+          "cost_micros": 410,
+          "active_ms": 2399
+        }
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "at_ms": 1791231920728,
+      "kind": "worker_killed",
+      "signal": "SIGKILL",
+      "pid": 85219,
+      "reason": "provider executed, commit not recorded",
+      "idem_key": "keel_a9bcbad76988f42c60fcee63488fdaca39b3da0ab536268b",
+      "adapter": "stripe.refund",
+      "point": "after_call",
+      "provider_result": {
+        "id": "re_fake_000069",
+        "status": "succeeded",
+        "amount_cents": 12000,
+        "payment_intent": "pi_fake_000048"
+      }
+    }
+  ],
+  "diffs": [
+    {
+      "a": "main",
+      "b": "alt",
+      "trajectory": [
+        {
+          "op": "equal",
+          "a": "triage#1",
+          "b": "triage#1"
+        },
+        {
+          "op": "equal",
+          "a": "lookup#1",
+          "b": "lookup#1"
+        },
+        {
+          "op": "equal",
+          "a": "triage#2",
+          "b": "triage#2"
+        },
+        {
+          "op": "equal",
+          "a": "refund#1",
+          "b": "refund#1"
+        },
+        {
+          "op": "equal",
+          "a": "triage#3",
+          "b": "triage#3"
+        }
+      ],
+      "content": [
+        {
+          "step_id": "triage#3",
+          "a": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+          "b": "Refunded $120.00. Expect it in 5–10 days.",
+          "unified": "--- main\n+++ alt\n@@ -1 +1 @@\n-Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.\n\\ No newline at end of file\n+Refunded $120.00. Expect it in 5–10 days.\n\\ No newline at end of file\n"
+        }
+      ],
+      "outcome": {
+        "a": {
+          "ticket_id": "T-5001",
+          "decision": "refunded",
+          "message": "Good news: I've refunded $120.00 to your original payment method (ref re_fake_000069). It should appear within 5–10 business days.",
+          "refund": {
+            "id": "re_fake_000069",
+            "status": "succeeded",
+            "amount_cents": 12000,
+            "payment_intent": "pi_fake_000048"
+          },
+          "turns": 3
+        },
+        "b": {
+          "ticket_id": "T-5001",
+          "decision": "refunded",
+          "message": "Refunded $120.00. Expect it in 5–10 days.",
+          "refund": {
+            "id": "re_fake_000069",
+            "status": "succeeded",
+            "amount_cents": 12000,
+            "payment_intent": "pi_fake_000048"
+          },
+          "turns": 3
+        },
+        "identical": false,
+        "changed_fields": [
+          "message"
+        ],
+        "judge": "fields",
+        "same_outcome": true
+      },
+      "economics": {
+        "a": {
+          "steps": 5,
+          "llm_calls": 3,
+          "effects": 2,
+          "simulated_effects": 0,
+          "tokens_in": 816,
+          "tokens_out": 75,
+          "cost_micros": 2232,
+          "active_ms": 4907
+        },
+        "b": {
+          "steps": 5,
+          "llm_calls": 3,
+          "effects": 2,
+          "simulated_effects": 1,
+          "tokens_in": 816,
+          "tokens_out": 53,
+          "cost_micros": 410,
+          "active_ms": 2399
+        },
+        "tokens_delta_pct": -2.5,
+        "cost_delta_pct": -81.6,
+        "active_ms_delta_pct": -51.1
+      }
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+{
+  "schema": "keel.chaos/v1",
+  "provider": "fake-stripe",
+  "llm": "scripted",
+  "lease_ms": 2000,
+  "runs": [
+    {
+      "n": 1,
+      "run_id": "01a10dbd-ef17-708d-9d69-08ff2be2f6ca",
+      "order_id": "ORD-1001",
+      "kill_mode": "before-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231915620,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85187,
+        "reason": "before provider call",
+        "idem_key": "keel_9542afade33c79e43b5baa58259faa43af4ef9f252e35c14",
+        "adapter": "stripe.refund",
+        "point": "before_call"
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 2,
+      "run_id": "01a10dbe-0372-7767-9b4a-63a1cec60e01",
+      "order_id": "ORD-1002",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231920728,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85219,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_a9bcbad76988f42c60fcee63488fdaca39b3da0ab536268b",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000069",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000048"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 3,
+      "run_id": "01a10dbe-1710-7717-aaeb-b013c81bf915",
+      "order_id": "ORD-1003",
+      "kill_mode": "random",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231926101,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85249,
+        "reason": "random kill",
+        "after_ms": 2093
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 4,
+      "run_id": "01a10dbe-306d-71ba-a47e-88f4e9d9391c",
+      "order_id": "ORD-1004",
+      "kill_mode": "random",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231932978,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85288,
+        "reason": "random kill",
+        "after_ms": 2465
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 5,
+      "run_id": "01a10dbe-4642-7352-9404-6ebb677fdfd8",
+      "order_id": "ORD-1005",
+      "kill_mode": "random",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231936124,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85319,
+        "reason": "random kill",
+        "after_ms": 23
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 6,
+      "run_id": "01a10dbe-5a92-76e6-8555-afcf02300887",
+      "order_id": "ORD-1006",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231942646,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85351,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_ee77a2d5f54607f3b964bf982953e130a6e036f59f81bea7",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000073",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000052"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 7,
+      "run_id": "01a10dbe-6b70-7318-84d4-7a4a7a5b6a5a",
+      "order_id": "ORD-1007",
+      "kill_mode": "random",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231945640,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85382,
+        "reason": "random kill",
+        "after_ms": 23
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 8,
+      "run_id": "01a10dbe-7e15-77c7-8dfa-59141b48721c",
+      "order_id": "ORD-1008",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231951850,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85412,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_bd627860476aac5fbc1b65e74fb8e23c1ac71003f21d520a",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000075",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000054"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 9,
+      "run_id": "01a10dbe-8f0e-75c8-82ae-5e894fe7d7c2",
+      "order_id": "ORD-1009",
+      "kill_mode": "random",
+      "killed": false,
+      "kill_annotation": null,
+      "workers_used": 1,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 10,
+      "run_id": "01a10dbe-977b-75bd-ac55-2ea7e860aed2",
+      "order_id": "ORD-1010",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231958167,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85451,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_741e31882a2efd07bff9982c292f1d47dcb2680e64756676",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000077",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000056"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 11,
+      "run_id": "01a10dbe-aa64-75ac-9346-476327a7c8c5",
+      "order_id": "ORD-1011",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231963382,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85481,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_a2d5b13f52ddbbaa94f897b3e9c1a916ee0f7600422565e1",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000078",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000057"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 12,
+      "run_id": "01a10dbe-bd77-7600-8e89-55d82f2d0df7",
+      "order_id": "ORD-1012",
+      "kill_mode": "random",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231967793,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85511,
+        "reason": "random kill",
+        "after_ms": 1176
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 13,
+      "run_id": "01a10dbe-d2ea-73dc-8c51-b341d248237b",
+      "order_id": "ORD-1013",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231973492,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85543,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_94de4907bfff0c1485c5dfc770ba1681ebeb7af3eb120285",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000080",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000059"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 14,
+      "run_id": "01a10dbe-e63d-72c9-82a0-224ea5aa5b61",
+      "order_id": "ORD-1014",
+      "kill_mode": "before-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231978535,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85574,
+        "reason": "before provider call",
+        "idem_key": "keel_5c0c5d67a0749e128c69d0bfacce59c8925d96554aa2d5e9",
+        "adapter": "stripe.refund",
+        "point": "before_call"
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 15,
+      "run_id": "01a10dbe-f959-71a0-a8ec-4f945e320c28",
+      "order_id": "ORD-1015",
+      "kill_mode": "before-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231983586,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85604,
+        "reason": "before provider call",
+        "idem_key": "keel_0a8f6fadfc9bfb624780b3ad308bfda58125a7c18cc63678",
+        "adapter": "stripe.refund",
+        "point": "before_call"
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 16,
+      "run_id": "01a10dbf-0ae0-77ec-a82e-5246fac2b11a",
+      "order_id": "ORD-1016",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231988712,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85639,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_10176c48bc22a65f28944a915f30ec6c88b0927596310292",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000083",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000062"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 17,
+      "run_id": "01a10dbf-21f3-751e-a76c-04d08f79cd7c",
+      "order_id": "ORD-1017",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231994661,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85669,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_8a70a5841e2de2cc0979a2e394153c0aac77c01a0aedec0b",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000084",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000063"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 18,
+      "run_id": "01a10dbf-37ba-7676-be20-49e712d12de9",
+      "order_id": "ORD-1018",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791231999980,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85703,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_1777db0148480d470fe29c4fe62b3355f643fef55ec423fb",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000085",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000064"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 19,
+      "run_id": "01a10dbf-4b64-7748-ab92-28ec7e0231f6",
+      "order_id": "ORD-1019",
+      "kill_mode": "after-refund",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791232004033,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85734,
+        "reason": "provider executed, commit not recorded",
+        "idem_key": "keel_3d63c44bc12fb67540c78114b8b5de087ec9d60143c2a732",
+        "adapter": "stripe.refund",
+        "point": "after_call",
+        "provider_result": {
+          "id": "re_fake_000086",
+          "status": "succeeded",
+          "amount_cents": 12000,
+          "payment_intent": "pi_fake_000065"
+        }
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    },
+    {
+      "n": 20,
+      "run_id": "01a10dbf-5d6b-778a-9d9b-23192dbfd284",
+      "order_id": "ORD-1020",
+      "kill_mode": "random",
+      "killed": true,
+      "kill_annotation": {
+        "at_ms": 1791232009324,
+        "kind": "worker_killed",
+        "signal": "SIGKILL",
+        "pid": 85764,
+        "reason": "random kill",
+        "after_ms": 1759
+      },
+      "workers_used": 2,
+      "status": "completed",
+      "refunds_at_provider": 1,
+      "replay_clean": true
+    }
+  ],
+  "total_runs": 20,
+  "total_killed": 19,
+  "total_refunds": 20,
+  "duplicates": [],
+  "all_replays_clean": true
+}

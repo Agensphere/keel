@@ -1,0 +1,29 @@
+[package]
+name = "agensphere-keel"
+description = "KEEL by Agensphere: durable execution for agents. Crash-proof, replayable, forkable runs with exactly-once effects."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+readme = "../../README.md"
+keywords = ["agents", "durable-execution", "llm", "workflow", "replay"]
+categories = ["asynchronous"]
+
+[lib]
+name = "keel"
+
+[features]
+default = ["postgres"]
+postgres = ["keel-store/postgres"]
+
+[dependencies]
+keel-core.workspace = true
+keel-store.workspace = true
+keel-adapters.workspace = true
+keel-worker.workspace = true
+
+[lints]
+workspace = true
